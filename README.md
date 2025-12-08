@@ -1,3 +1,6 @@
+[![GitHub Actions Workflow Status](https://github.com/bdreece/rho/actions/workflows/build.yml/badge.svg)](https://github.com/bdreece/rho/actions/workflows/build.yml)
+[![Go Reference](https://pkg.go.dev/badge/github.com/bdreece/rho.svg)](https://pkg.go.dev/github.com/bdreece/rho)
+
 # rho
 
 Generic HTTP request handler abstraction using [github.com/go-chi/chi/v5](https://github.com/go-chi/chi)
