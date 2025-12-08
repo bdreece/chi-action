@@ -31,6 +31,11 @@ func (err HttpError) LogValue() slog.Value {
 	)
 }
 
+func (err HttpError) Render(w http.ResponseWriter, r *http.Request) error {
+	http.Error(w, err.Error(), err.Code())
+	return nil
+}
+
 func (err HttpError) WithInternal(internal error) HttpError {
 	err.internal = internal
 	return err
