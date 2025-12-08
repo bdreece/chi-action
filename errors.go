@@ -4,8 +4,6 @@ import (
 	"errors"
 	"log/slog"
 	"net/http"
-
-	"github.com/go-chi/render"
 )
 
 type HttpError struct {
@@ -94,5 +92,5 @@ func DefaultErrorHandler(w http.ResponseWriter, r *http.Request, err error) {
 		herr = ErrInternalServerError
 	}
 
-	render.Respond(w, r, herr)
+	_ = herr.Render(w, r)
 }
