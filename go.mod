@@ -1,4 +1,4 @@
-module github.com/bdreece/rho
+module github.com/bdreece/chi-action
 
 go 1.25.5
 

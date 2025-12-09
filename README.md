@@ -1,10 +1,10 @@
-[![GitHub Actions Workflow Status](https://github.com/bdreece/rho/actions/workflows/build.yml/badge.svg)](https://github.com/bdreece/rho/actions/workflows/build.yml)
-[![Go Reference](https://pkg.go.dev/badge/github.com/bdreece/rho.svg)](https://pkg.go.dev/github.com/bdreece/rho)
+[![GitHub Actions Workflow Status](https://github.com/bdreece/chi-action/actions/workflows/build.yml/badge.svg)](https://github.com/bdreece/chi-action/actions/workflows/build.yml)
+[![Go Reference](https://pkg.go.dev/badge/github.com/bdreece/chi-action.svg)](https://pkg.go.dev/github.com/bdreece/chi-action)
 
-# rho
+# chi-action
 
-Generic HTTP request handler abstraction using [github.com/go-chi/chi/v5](https://github.com/go-chi/chi)
-and [github.com/go-chi/render](https://github.com/go-chi/render).
+Generic HTTP request handler abstraction using [github.com/go-chi/chi/v5](https://pkg.go.dev/github.com/go-chi/chi/v5)
+and [github.com/go-chi/render](https://pkg.go.dev/github.com/go-chi/render).
 
 ## Usage
 
@@ -17,14 +17,15 @@ import (
     "net"
     "net/http"
 
+    "github.com/bdreece/chi-action"
     "github.com/go-chi/chi/v5"
-    "github.com/bdreece/rho"
+    "github.com/go-chi/render"
 )
 
 func main() {
     mux := chi.NewMux()
 
-    mux.Post("/echo", rho.HandleFunc(echo))
+    mux.Post("/echo", action.HandleFunc(echo))
 
     // ...
 }
@@ -33,27 +34,18 @@ func echo(ctx context.Context, req *echoRequest) (*echoResponse, error) {
     return &echoResponse(*echoRequest), nil
 }
 
-type echoRequest string
+type (
+    echoRequest string
+    echoResponse string
+)
 
 func (req *echoRequest) Bind(r *http.Request) error {
-    defer r.Body.Close()
-
-    content, err := io.ReadAll(r.Body)
-    if err != nil {
-        return err
-    }
-
-    *req = echoRequest(content)
-    return nil
+    return render.DecodeJSON(r.Body, req)
 }
 
-type echoResponse string
 
-func (res *echoResponse) Render(w http.ResponseWriter, _ *http.Request) error {
-    if _, err := io.WriteString(w, string(*res)); err != nil {
-        return err
-    }
-
+func (res *echoResponse) Render(w http.ResponseWriter, r *http.Request) error {
+    render.JSON(w, r, res)
     return nil
 }
 ```
